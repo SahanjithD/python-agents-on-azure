@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+infra:
+    provider: microsoft.foundry
+name: python-agents-on-azure
+services:
+    ballerina-demo:
+        endpoint: https://foundry-dasuns-demo.services.ai.azure.com/api/projects/ballerina-demo
+        host: azure.ai.project
+    py-demo-agent:
+        codeConfiguration:
+            dependencyResolution: remote_build
+            entryPoint: main.py
+            runtime: python_3_13
+        container:
+            resources:
+                cpu: "0.5"
+                memory: 1Gi
+        env:
+            AZURE_AI_MODEL_DEPLOYMENT_NAME: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
+        host: azure.ai.agent
+        kind: hosted
+        language: python
+        name: py-demo-agent
+        project: layer2-framework
+        protocols:
+            - protocol: responses
+              version: 2.0.0
+        sessionConfiguration:
+            idleTimeoutSeconds: 300
+        uses:
+            - ballerina-demo
